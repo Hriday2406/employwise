@@ -1,8 +1,21 @@
-export default function App() {
+import { Route, Routes } from "react-router-dom";
+import Login from "./Login";
+import Users from "./Users";
+import EditUser from "./EditUser";
+
+function App() {
   return (
     <>
-      <h1>Employ Wise</h1>
+      <div className="w-screen h-dvh">
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/users" element={<Users />} />
+          <Route path="/users/:id" element={<EditUser />} />
+        </Routes>
+      </div>
     </>
   );
 }
+
+export default App;
 
