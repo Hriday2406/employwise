@@ -6,7 +6,7 @@ import EditUser from "./EditUser";
 function App() {
   return (
     <>
-      <div className="">
+      <div className="w-screen h-dvh">
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/users" element={<Users />} />

@@ -6,7 +6,7 @@ axios.defaults.baseURL = "https://reqres.in/api";
 function usePostLogin(email, password) {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -20,7 +20,7 @@ function usePostLogin(email, password) {
       } catch (error) {
         setError(error);
       } finally {
-        setIsLoading(false);
+        setTimeout(() => setIsLoading(false), 1000);
       }
     })();
   }, []);
