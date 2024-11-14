@@ -11,8 +11,7 @@ function usePostLogin() {
   const [password, setPassword] = useState(null);
 
   useEffect(() => {
-    email &&
-      password == "cityslicka" &&
+    if (password == "cityslicka") {
       (async () => {
         try {
           setIsLoading(true);
@@ -26,13 +25,17 @@ function usePostLogin() {
               "Content-Type": "application/json",
             }
           );
-          setData(response.data);
+          setTimeout(() => setData(response.data), 1000);
         } catch (error) {
           setError(error);
         } finally {
           setTimeout(() => setIsLoading(false), 1000);
         }
       })();
+    } else {
+      setError("Invalid Credentials");
+      setIsLoading(false);
+    }
   }, [email, password]);
 
   return [data, error, isLoading, setEmail, setPassword];
@@ -48,7 +51,7 @@ function useGetUsers(page) {
       try {
         setIsLoading(true);
         const response = await axios.get(`/api/users?page=${page}`);
-        setData(response.data);
+        setTimeout(() => setData(response.data), 1000);
       } catch (error) {
         setError(error);
       } finally {
