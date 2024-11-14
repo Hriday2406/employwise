@@ -1,9 +1,24 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useGetUsers } from "../utils/APIs";
+import { useDeleteUser, useGetUsers } from "../utils/APIs";
 import { Button } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function UserCard({ user }) {
+  const navigate = useNavigate();
+  const [data, error, isLoading, setId] = useDeleteUser();
+
+  useEffect(() => {
+    if (typeof data == "string") {
+      // delete user
+    }
+  }, [data]);
+
+  function handleDelete() {
+    setId(user.id);
+  }
+  function handleEdit() {
+    navigate(`/users/${user.id}`);
+  }
   return (
     <div className="flex gap-2 p-3 flex-col px-5 border-2 bg-primary border-primary rounded-2xl w-64 items-center shadow-xl select-none">
       <img
@@ -14,6 +29,14 @@ function UserCard({ user }) {
       <h1 className="text-xl text-white font-medium">
         {user.first_name} {user.last_name}
       </h1>
+      <div className="flex gap-2">
+        <Button className="font-medium" onClick={handleEdit}>
+          Edit
+        </Button>
+        <Button className="font-medium" onClick={handleDelete}>
+          Delete
+        </Button>
+      </div>
     </div>
   );
 }
@@ -22,7 +45,8 @@ export default function Users() {
   let [searchParams] = useSearchParams();
   const page = searchParams.get("page");
   const [currentPageNo, setCurrentPageNo] = useState(page || 1);
-  const [usersList, error, isLoading] = useGetUsers(currentPageNo);
+  const [usersList, error, isLoading, setUsersList] =
+    useGetUsers(currentPageNo);
   const navigate = useNavigate();
 
   return (

@@ -33,7 +33,7 @@ function usePostLogin() {
         }
       })();
     } else {
-      setError("Invalid Credentials");
+      password != null && setError("Invalid Credentials");
       setIsLoading(false);
     }
   }, [email, password]);
@@ -60,7 +60,77 @@ function useGetUsers(page) {
     })();
   }, [page]);
 
+  return [data, error, isLoading, setData];
+}
+
+function useGetUser(id) {
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        setIsLoading(true);
+        const response = await axios.get(`/api/users/${id}`);
+        setTimeout(() => setData(response.data), 1500);
+      } catch (error) {
+        setError(error);
+      } finally {
+        setTimeout(() => setIsLoading(false), 1500);
+      }
+    })();
+  }, [id]);
+
   return [data, error, isLoading];
 }
 
-export { usePostLogin, useGetUsers };
+function usePutUser() {
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [id, setId] = useState(-1);
+  const [body, setBody] = useState({});
+
+  useEffect(() => {
+    id != -1 &&
+      (async () => {
+        try {
+          setIsLoading(true);
+          const response = await axios.put(`/api/users/${id}`, body);
+          setTimeout(() => setData(response.data), 1000);
+        } catch (error) {
+          setError(error);
+        } finally {
+          setTimeout(() => setIsLoading(false), 1000);
+        }
+      })();
+  }, [id, body]);
+
+  return [data, error, isLoading, setId, setBody];
+}
+
+function useDeleteUser() {
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [id, setId] = useState(-1);
+  useEffect(() => {
+    id != -1 &&
+      (async () => {
+        try {
+          setIsLoading(true);
+          const response = await axios.delete(`/api/users/${id}`);
+          setTimeout(() => setData(response.data), 1000);
+        } catch (error) {
+          setError(error);
+        } finally {
+          setTimeout(() => setIsLoading(false), 1000);
+        }
+      })();
+  }, [id]);
+
+  return [data, error, isLoading, setId];
+}
+
+export { usePostLogin, useGetUsers, useGetUser, usePutUser, useDeleteUser };
