@@ -3,9 +3,8 @@ import { useEffect, useState } from "react";
 
 axios.defaults.baseURL = "https://reqres.in";
 
-function usePostLogin() {
+function usePostLogin({ showMessage }) {
   const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
@@ -27,23 +26,24 @@ function usePostLogin() {
           );
           setTimeout(() => setData(response.data), 1000);
         } catch (error) {
-          setError(error);
+          password &&
+            showMessage({ type: "error", content: "Invalid Credentials" });
         } finally {
           setTimeout(() => setIsLoading(false), 1000);
         }
       })();
     } else {
-      password != null && setError("Invalid Credentials");
+      password &&
+        showMessage({ type: "error", content: "Invalid Credentials" });
       setIsLoading(false);
     }
   }, [email, password]);
 
-  return [data, error, isLoading, setEmail, setPassword];
+  return [data, isLoading, setEmail, setPassword];
 }
 
-function useGetUsers(page) {
+function useGetUsers(page, showMessage) {
   const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -51,16 +51,17 @@ function useGetUsers(page) {
       try {
         setIsLoading(true);
         const response = await axios.get(`/api/users?page=${page}`);
+        showMessage({ type: "success", content: "Users fetched successfully" });
         setTimeout(() => setData(response.data), 1000);
       } catch (error) {
-        setError(error);
+        showMessage({ type: "error", content: "Something went wrong" });
       } finally {
         setTimeout(() => setIsLoading(false), 1000);
       }
     })();
   }, [page]);
 
-  return [data, error, isLoading, setData];
+  return [data, isLoading, setData];
 }
 
 function useGetUser(id) {
@@ -110,9 +111,8 @@ function usePutUser() {
   return [data, error, isLoading, setId, setBody];
 }
 
-function useDeleteUser() {
+function useDeleteUser({ showMessage }) {
   const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [id, setId] = useState(-1);
   useEffect(() => {
@@ -121,16 +121,20 @@ function useDeleteUser() {
         try {
           setIsLoading(true);
           const response = await axios.delete(`/api/users/${id}`);
+          showMessage({
+            type: "success",
+            content: "User deleted successfully",
+          });
           setTimeout(() => setData(response.data), 1000);
         } catch (error) {
-          setError(error);
+          showMessage({ type: "error", content: "Unable to delete user" });
         } finally {
           setTimeout(() => setIsLoading(false), 1000);
         }
       })();
   }, [id]);
 
-  return [data, error, isLoading, setId];
+  return [data, isLoading, setId];
 }
 
 export { usePostLogin, useGetUsers, useGetUser, usePutUser, useDeleteUser };
