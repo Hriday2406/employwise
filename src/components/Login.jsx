@@ -1,27 +1,28 @@
 import { useNavigate } from "react-router-dom";
 import { usePostLogin } from "../utils/APIs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "antd";
 
 export default function Login() {
   const navigate = useNavigate();
-  // if (localStorage.getItem("token")) navigate("/users");
-
+  const [data, error, isLoading, setApiEmail, setApiPassword] = usePostLogin();
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
-  const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (localStorage.getItem("token")) navigate("/users");
+  }, []);
+
+  useEffect(() => {
+    if (data) {
+      localStorage.setItem("token", data.token);
+      navigate("/users");
+    }
+  }, [data]);
 
   function handleLogin() {
-    //   const [data, error, isLoading] = usePostLogin(email, password);
-    //   setData(data);
-    //   setError(error);
-    //   setIsLoading(isLoading);
-    //   if (data) {
-    //     localStorage.setItem("token", data.token);
-    //     navigate("/users");
-    //   }
+    setApiEmail(email);
+    setApiPassword(password);
   }
 
   return (
@@ -41,6 +42,7 @@ export default function Login() {
           placeholder="Password"
           className="w-full border-[1px] p-2 rounded-lg border-black shadow-lg"
           onChange={(e) => setPassword(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleLogin()}
         />
         <Button
           type="primary"
@@ -48,6 +50,7 @@ export default function Login() {
           className="shadow-lg"
           onClick={handleLogin}
           disabled={!email || !password}
+          onKeyDown={(e) => e.key === "Enter" && handleLogin()}
         >
           Login
         </Button>
