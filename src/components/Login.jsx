@@ -10,13 +10,13 @@ export default function Login() {
   const [password, setPassword] = useState(null);
 
   useEffect(() => {
-    if (localStorage.getItem("token")) navigate("/users");
+    if (localStorage.getItem("token")) navigate("/users?page=1");
   }, []);
 
   useEffect(() => {
     if (data) {
       localStorage.setItem("token", data.token);
-      navigate("/users");
+      navigate("/users?page=1");
     }
   }, [data]);
 

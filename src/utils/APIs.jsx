@@ -1,32 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-axios.defaults.baseURL = "https://reqres.in/api";
-
-// function usePostLogin(email, password) {
-//   const [data, setData] = useState(null);
-//   const [error, setError] = useState(null);
-//   const [isLoading, setIsLoading] = useState(false);
-
-//   useEffect(() => {
-//     (async () => {
-//       try {
-//         setIsLoading(true);
-//         const response = await axios.post("/login", {
-//           email,
-//           password,
-//         });
-//         setData(response.data);
-//       } catch (error) {
-//         setError(error);
-//       } finally {
-//         setTimeout(() => setIsLoading(false), 1000);
-//       }
-//     })();
-//   }, []);
-
-//   return [data, error, isLoading];
-// }
+axios.defaults.baseURL = "https://reqres.in";
 
 function usePostLogin() {
   const [data, setData] = useState(null);
@@ -39,10 +14,9 @@ function usePostLogin() {
     email &&
       password == "cityslicka" &&
       (async () => {
-        console.log("effect is running");
         try {
           setIsLoading(true);
-          const response = await axios.post("/login", {
+          const response = await axios.post("/api/login", {
             email,
             password,
           });
@@ -58,4 +32,28 @@ function usePostLogin() {
   return [data, error, isLoading, setEmail, setPassword];
 }
 
-export { usePostLogin };
+function useGetUsers(page) {
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  console.log("get users api is called");
+
+  useEffect(() => {
+    (async () => {
+      try {
+        console.log("get users api is running");
+        setIsLoading(true);
+        const response = await axios.get(`/api/users?page=${page}`);
+        setData(response.data);
+      } catch (error) {
+        setError(error);
+      } finally {
+        setTimeout(() => setIsLoading(false), 1000);
+      }
+    })();
+  }, []);
+
+  return [data, error, isLoading];
+}
+
+export { usePostLogin, useGetUsers };
