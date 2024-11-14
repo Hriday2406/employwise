@@ -16,10 +16,16 @@ function usePostLogin() {
       (async () => {
         try {
           setIsLoading(true);
-          const response = await axios.post("/api/login", {
-            email,
-            password,
-          });
+          const response = await axios.post(
+            "/api/login",
+            {
+              email,
+              password,
+            },
+            {
+              "Content-Type": "application/json",
+            }
+          );
           setData(response.data);
         } catch (error) {
           setError(error);
@@ -36,12 +42,10 @@ function useGetUsers(page) {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  console.log("get users api is called");
 
   useEffect(() => {
     (async () => {
       try {
-        console.log("get users api is running");
         setIsLoading(true);
         const response = await axios.get(`/api/users?page=${page}`);
         setData(response.data);
@@ -51,7 +55,7 @@ function useGetUsers(page) {
         setTimeout(() => setIsLoading(false), 1000);
       }
     })();
-  }, []);
+  }, [page]);
 
   return [data, error, isLoading];
 }

@@ -26,7 +26,7 @@ export default function Login() {
   }
 
   return (
-    <section className="size-full flex justify-center items-center">
+    <section className="w-full h-dvh flex justify-center items-center">
       <div className="flex flex-col border-2 p-5 items-center border-primary rounded-3xl gap-5 shadow-xl">
         <h1 className="text-2xl font-bold underline decoration-primary ">
           Login
