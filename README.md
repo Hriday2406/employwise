@@ -1,7 +1,7 @@
 # EmployWise Assignment
 
 ## Deployment Link
-- 
+- https://employwise-lemon.vercel.app/
 
 ## Setup Instructions
 1. Clone the repository, can use this HTTPS link ```https://github.com/Hriday2406/employwise.git```.
